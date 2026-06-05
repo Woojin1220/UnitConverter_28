@@ -115,7 +115,7 @@ Phase·Layer·Track 작업을 마칠 때 아래를 포함해 보고한다:
 | SC 대조 | SC1 / SC2 / SC3 중 이번 변경이 기여한 항목 |
 | 다음 단계 | 한 가지 — RED / GREEN / REFACTOR + Layer + Track |
 
-Golden Master·스냅샷을 변경했다면 **사용자 승인 여부**를 반드시 명시한다.
+Golden Master·스냅샷을 변경했다면 **사용자 승인 여부**를 반드시 명시한다. SSOT: `golden/<case>/output.txt` + `approval.yaml` (인덱스: `golden/manifest.yaml`).
 
 ---
 

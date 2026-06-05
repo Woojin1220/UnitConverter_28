@@ -45,7 +45,7 @@
 
 ## UI Track — Golden Master (`tests/boundary/`)
 
-> Logic GREEN 후 · fixtures: `tests/boundary/fixtures/*.stdout`
+> Logic GREEN 후 · SSOT: `golden/<case>/output.txt` + `approval.yaml`
 
 | ID | 파일 | 함수 | 입력 | 요약 |
 |----|------|------|------|------|

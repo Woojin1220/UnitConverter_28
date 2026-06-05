@@ -16,7 +16,7 @@
     "beforeShellExecution": [
       {
         "command": ".cursor/hooks/deny-snapshot-regen.sh",
-        "matcher": "--snapshot-update|--update-snapshots|fixtures/|--force",
+        "matcher": "--snapshot-update|--update-snapshots|golden/|output.txt|approval.yaml|--force",
         "failClosed": true,
         "timeout": 10
       }

@@ -1,0 +1,8 @@
+test_id: U-CLI-03
+name: u_cli_03_invalid_number
+input: "meter:abc"
+approved_at: "2026-06-05"
+approved_by: user
+reason: Initial GREEN Golden Master — invalid number rejection
+commit: 041f37f816bdeecc7b9344a46a96d9e6bce02350
+migrated_to_golden_dir: true

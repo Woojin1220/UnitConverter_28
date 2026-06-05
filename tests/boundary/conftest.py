@@ -1,9 +1,5 @@
-"""Boundary test helpers — Golden Master loader."""
+"""Boundary test helpers — re-export Golden Master loader."""
 
-from pathlib import Path
+from tests.boundary.golden_loader import load_golden_master
 
-FIXTURES_DIR = Path(__file__).resolve().parent / "fixtures"
-
-
-def load_golden_master(name: str) -> str:
-    return (FIXTURES_DIR / f"{name}.stdout").read_text(encoding="utf-8")
+__all__ = ["load_golden_master"]

@@ -27,7 +27,9 @@ BLOCK_PATTERNS = [
     r"--snapshot-update",
     r"--update-snapshots",
     r"snapshot.*update",
-    r"tests/boundary/fixtures/",
+    r"golden/.*output\.txt",
+    r"golden/.*approval\.yaml",
+    r"golden/manifest\.yaml",
     r"pytest.*--force",
 ]
 

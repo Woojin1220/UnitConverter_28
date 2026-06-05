@@ -1,0 +1,23 @@
+version: 1
+description: UI Track Golden Master index (U-CLI-*)
+cases:
+  - name: u_cli_01_meter_conversion
+    test_id: U-CLI-01
+    input: "meter:2.5"
+    file: u_cli_01_meter_conversion/output.txt
+  - name: u_cli_02_invalid_format
+    test_id: U-CLI-02
+    input: "meter2.5"
+    file: u_cli_02_invalid_format/output.txt
+  - name: u_cli_03_invalid_number
+    test_id: U-CLI-03
+    input: "meter:abc"
+    file: u_cli_03_invalid_number/output.txt
+  - name: u_cli_04_unknown_unit
+    test_id: U-CLI-04
+    input: "cubit:2"
+    file: u_cli_04_unknown_unit/output.txt
+  - name: u_cli_05_negative_value
+    test_id: U-CLI-05
+    input: "meter:-1"
+    file: u_cli_05_negative_value/output.txt

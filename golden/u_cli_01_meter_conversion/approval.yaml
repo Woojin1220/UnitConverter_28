@@ -1,0 +1,8 @@
+test_id: U-CLI-01
+name: u_cli_01_meter_conversion
+input: "meter:2.5"
+approved_at: "2026-06-05"
+approved_by: user
+reason: Initial GREEN Golden Master — G1 meter conversion (input unit excluded)
+commit: 041f37f816bdeecc7b9344a46a96d9e6bce02350
+migrated_to_golden_dir: true

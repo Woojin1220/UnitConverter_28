@@ -26,7 +26,7 @@
 | SC2 | ⚳ entity D-EXT ✅ · CLI FR-9 ❌ |
 | SC3 | ✅ pytest 18 passed |
 
-상세: [`docs/PRD.md`](./docs/PRD.md) · [`Report/2.ProblemDefinition_Report.md`](./Report/2.ProblemDefinition_Report.md) · [**Report 8 — 누적 SSOT**](./Report/8.%20UnitConverter_Progress_Summary_Report.md)
+상세: [`docs/PRD.md`](./docs/PRD.md) · [`2. ProblemDefinition_Report.md`](./docs/Report/2.%20ProblemDefinition_Report.md) · [**Report 8 — 누적 SSOT**](./docs/Report/8.%20UnitConverter_Progress_Summary_Report.md)
 
 ---
 
@@ -46,7 +46,7 @@
 
 ---
 
-> **누적 진행 SSOT:** [Report/8. UnitConverter_Progress_Summary_Report.md](./Report/8.%20UnitConverter_Progress_Summary_Report.md)
+> **누적 진행 SSOT:** [Report/8. UnitConverter_Progress_Summary_Report.md](./docs/Report/8.%20UnitConverter_Progress_Summary_Report.md)
 
 ## TDD 진행 목록
 
@@ -89,7 +89,7 @@ D-CONV-03: 8.2021 feet → 2.734025 yard (meter 경유)
 - [x] Logic: `pytest tests/entity tests/control -q` — **12 passed**
 - [x] UI: `pytest tests/boundary -q` — **6 passed**
 - [x] 전체: `pytest -q` — **18 passed**
-- [x] Golden Master: `tests/boundary/fixtures/u_cli_01~05.stdout`
+- [x] Golden Master: `golden/u_cli_01~05/` (output.txt + approval.yaml)
 - [ ] REFACTOR — 구조 개선·문서 동기화
 
 ---
@@ -141,25 +141,25 @@ UnitConverter_28/
 ├── .cursorrules                  # ECB · Dual-Track · TDD 정책
 ├── pyproject.toml                # pytest testpaths · pythonpath=src
 ├── docs/
-│   └── PRD.md
-├── Report/
-│   ├── 1. mom-test-report.md
-│   ├── 2. ProblemDefinition_Report.md
-│   ├── 3. AI-Layer-Setup_Report.md
-│   ├── 4. UnitConverter_RED_Design_Report.md
-│   ├── 5. UnitConverter_RED_Skeleton_Report.md
-│   ├── 6. UnitConverter_Logic_RED_Complete_Report.md
-│   ├── 7. UnitConverter_GREEN_Complete_Report.md
-│   └── 8. UnitConverter_Progress_Summary_Report.md   # 누적 SSOT
-├── Prompt/
-│   ├── 1. mom-test-transcript.md
-│   ├── 2. ProblemDefinition-transcript.md
-│   ├── 3. AI-Layer-Setup-transcript.md
-│   ├── 4. UnitConverter_RED_Design-Transcript.md
-│   ├── 5. UnitConverter_RED_Skeleton-Transcript.md
-│   ├── 6. UnitConverter_Logic_RED_Complete-Transcript.md
-│   ├── 7. UnitConverter_GREEN_Complete-Transcript.md
-│   └── 8. UnitConverter_Progress_Export-Transcript.md
+│   ├── PRD.md
+│   ├── Report/
+│   │   ├── 1. mom-test-report.md
+│   │   ├── 2. ProblemDefinition_Report.md
+│   │   ├── 3. AI-Layer-Setup_Report.md
+│   │   ├── 4. UnitConverter_RED_Design_Report.md
+│   │   ├── 5. UnitConverter_RED_Skeleton_Report.md
+│   │   ├── 6. UnitConverter_Logic_RED_Complete_Report.md
+│   │   ├── 7. UnitConverter_GREEN_Complete_Report.md
+│   │   └── 8. UnitConverter_Progress_Summary_Report.md   # 누적 SSOT
+│   └── Prompt/
+│       ├── 1. mom-test-transcript.md
+│       ├── 2. ProblemDefinition-transcript.md
+│       ├── 3. AI-Layer-Setup-transcript.md
+│       ├── 4. UnitConverter_RED_Design-Transcript.md
+│       ├── 5. UnitConverter_RED_Skeleton-Transcript.md
+│       ├── 6. UnitConverter_Logic_RED_Complete-Transcript.md
+│       ├── 7. UnitConverter_GREEN_Complete-Transcript.md
+│       └── 8. UnitConverter_Progress_Export-Transcript.md
 ├── src/
 │   ├── entity/                   # 변환·비율 (순수 로직)
 │   ├── control/                  # 파싱·유스케이스
@@ -168,7 +168,10 @@ UnitConverter_28/
 │   ├── conftest.py               # G1·검증·확장 픽스처 (데이터만)
 │   ├── entity/                   # test_d_conv_*.py, test_d_val_*.py, test_d_ext_*.py
 │   ├── control/
-│   └── boundary/                 # test_u_cli_*.py · fixtures/*.stdout
+│   └── boundary/                 # test_u_cli_*.py · golden_loader.py
+├── golden/                       # UI Golden Master SSOT · approval.yaml
+│   ├── manifest.yaml
+│   └── u_cli_*/output.txt
 └── .cursor/
     ├── commands/                 # tdd-red.md, review-ecb.md
     ├── hooks/                    # pytest 자동 실행·스냅샷 차단
@@ -288,16 +291,16 @@ meter:2.5
 | [docs/PRD.md](./docs/PRD.md) | **SSOT** — FR/SC/Loop/TDD |
 | [.cursorrules](./.cursorrules) | ECB · Dual-Track · TDD 게이트 |
 | [reference.md](./.cursor/skills/unit-conversion-tdd/reference.md) | **D-* 테스트 ID** |
-| [Report/3. AI-Layer-Setup_Report.md](./Report/3.%20AI-Layer-Setup_Report.md) | Harness · Hook · 8계층 |
-| [Report/4. UnitConverter_RED_Design_Report.md](./Report/4.%20UnitConverter_RED_Design_Report.md) | RED 설계 · C2C · G1 격자 |
-| [Report/5. UnitConverter_RED_Skeleton_Report.md](./Report/5.%20UnitConverter_RED_Skeleton_Report.md) | RED 스켈레톤 · D-CONV-01 FAIL |
-| [Report/6. UnitConverter_Logic_RED_Complete_Report.md](./Report/6.%20UnitConverter_Logic_RED_Complete_Report.md) | Logic RED 12건 완료 |
-| [Report/7. UnitConverter_GREEN_Complete_Report.md](./Report/7.%20UnitConverter_GREEN_Complete_Report.md) | GREEN · Golden Master · convert_all 정리 |
-| [Report/8. UnitConverter_Progress_Summary_Report.md](./Report/8.%20UnitConverter_Progress_Summary_Report.md) | **누적 진행 SSOT** · REFACTOR 백로그 |
-| [Prompt/4. UnitConverter_RED_Design-Transcript.md](./Prompt/4.%20UnitConverter_RED_Design-Transcript.md) | 세션 4 Transcript |
-| [Prompt/5. UnitConverter_RED_Skeleton-Transcript.md](./Prompt/5.%20UnitConverter_RED_Skeleton-Transcript.md) | 세션 5 Transcript |
-| [Prompt/6. UnitConverter_Logic_RED_Complete-Transcript.md](./Prompt/6.%20UnitConverter_Logic_RED_Complete-Transcript.md) | 세션 6 Transcript |
-| [Prompt/7. UnitConverter_GREEN_Complete-Transcript.md](./Prompt/7.%20UnitConverter_GREEN_Complete-Transcript.md) | 세션 7 GREEN Transcript |
-| [Prompt/8. UnitConverter_Progress_Export-Transcript.md](./Prompt/8.%20UnitConverter_Progress_Export-Transcript.md) | 세션 8 Export Transcript |
-| [Mom Test Report](./Report/1.%20mom-test-report.md) | 인터뷰 증거 |
-| [Problem Definition Report](./Report/2.ProblemDefinition_Report.md) | R-G-I-O · SC1~3 |
+| [Report/3. AI-Layer-Setup_Report.md](./docs/Report/3.%20AI-Layer-Setup_Report.md) | Harness · Hook · 8계층 |
+| [Report/4. UnitConverter_RED_Design_Report.md](./docs/Report/4.%20UnitConverter_RED_Design_Report.md) | RED 설계 · C2C · G1 격자 |
+| [Report/5. UnitConverter_RED_Skeleton_Report.md](./docs/Report/5.%20UnitConverter_RED_Skeleton_Report.md) | RED 스켈레톤 · D-CONV-01 FAIL |
+| [Report/6. UnitConverter_Logic_RED_Complete_Report.md](./docs/Report/6.%20UnitConverter_Logic_RED_Complete_Report.md) | Logic RED 12건 완료 |
+| [Report/7. UnitConverter_GREEN_Complete_Report.md](./docs/Report/7.%20UnitConverter_GREEN_Complete_Report.md) | GREEN · Golden Master · convert_all 정리 |
+| [Report/8. UnitConverter_Progress_Summary_Report.md](./docs/Report/8.%20UnitConverter_Progress_Summary_Report.md) | **누적 진행 SSOT** · REFACTOR 백로그 |
+| [Prompt/4. UnitConverter_RED_Design-Transcript.md](./docs/Prompt/4.%20UnitConverter_RED_Design-Transcript.md) | 세션 4 Transcript |
+| [Prompt/5. UnitConverter_RED_Skeleton-Transcript.md](./docs/Prompt/5.%20UnitConverter_RED_Skeleton-Transcript.md) | 세션 5 Transcript |
+| [Prompt/6. UnitConverter_Logic_RED_Complete-Transcript.md](./docs/Prompt/6.%20UnitConverter_Logic_RED_Complete-Transcript.md) | 세션 6 Transcript |
+| [Prompt/7. UnitConverter_GREEN_Complete-Transcript.md](./docs/Prompt/7.%20UnitConverter_GREEN_Complete-Transcript.md) | 세션 7 GREEN Transcript |
+| [Prompt/8. UnitConverter_Progress_Export-Transcript.md](./docs/Prompt/8.%20UnitConverter_Progress_Export-Transcript.md) | 세션 8 Export Transcript |
+| [Mom Test Report](./docs/Report/1.%20mom-test-report.md) | 인터뷰 증거 |
+| [Problem Definition Report](./docs/Report/2.%20ProblemDefinition_Report.md) | R-G-I-O · SC1~3 |
