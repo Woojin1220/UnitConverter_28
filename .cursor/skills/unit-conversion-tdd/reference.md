@@ -42,6 +42,10 @@
 | control | `convert_all(raw: str) -> dict[str, float]` | 등록된 **전** 단위 변환 (입력 단위 포함) |
 | control | `convert_excluding_input(raw: str) -> dict[str, float]` | 입력 단위 **제외** (boundary/CLI용) |
 | control | `run_conversion(raw: str) -> tuple[float, str, dict]` | boundary용 — `convert_excluding_input`와 동일 결과 |
+| control | `_convert_units(unit, value, *, exclude_input=False)` | private — 전/제외 변환 통합 (REFACTOR) |
+| boundary | `process(raw, *, format_numbers=False) -> ProcessResult` | CLI/GUI 유스케이스 · ok/lines 구조화 |
+| boundary | `format_number(value) -> str` | GUI 표시용 — max 5 decimals, trailing zero strip |
+| boundary | `run(raw: str) -> str` | CLI stdout 한 덩어리 (Golden Master) |
 
 ## UI Track — Golden Master (`tests/boundary/`)
 
@@ -51,7 +55,7 @@
 | ID | 파일 | 함수 | 입력 | 요약 |
 |----|------|------|------|------|
 | U-CLI-01 | `test_u_cli_01.py` | `test_u_cli_01_meter_conversion` · `test_u_cli_01_main_stdout` | `meter:2.5` | G1 변환 출력 (SC1) · capsys |
-| U-CLI-02 | `test_u_cli_02.py` | `test_u_cli_02_invalid_format` | `meter2.5` | 콜론 없음 |
-| U-CLI-03 | `test_u_cli_03.py` | `test_u_cli_03_invalid_number` | `meter:abc` | 숫자 아님 |
-| U-CLI-04 | `test_u_cli_04.py` | `test_u_cli_04_unknown_unit` | `cubit:2` | 미등록 단위 |
-| U-CLI-05 | `test_u_cli_05.py` | `test_u_cli_05_negative_value` | `meter:-1` | 음수 거부 |
+| U-CLI-02 | `test_u_cli_rejections.py` | `test_u_cli_rejection_golden_master[U-CLI-02]` | `meter2.5` | 콜론 없음 |
+| U-CLI-03 | `test_u_cli_rejections.py` | `test_u_cli_rejection_golden_master[U-CLI-03]` | `meter:abc` | 숫자 아님 |
+| U-CLI-04 | `test_u_cli_rejections.py` | `test_u_cli_rejection_golden_master[U-CLI-04]` | `cubit:2` | 미등록 단위 |
+| U-CLI-05 | `test_u_cli_rejections.py` | `test_u_cli_rejection_golden_master[U-CLI-05]` | `meter:-1` | 음수 거부 |

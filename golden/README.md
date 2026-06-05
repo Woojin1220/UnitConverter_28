@@ -27,7 +27,7 @@ golden/
 ## 정책
 
 - **변경·재생성:** 사용자 명시 승인 + `CURSOR_GM_APPROVED=1` (Hook)
-- **테스트:** `tests/boundary/test_u_cli_*.py` → `golden_loader.load_golden_master(name)`
+- **테스트:** `tests/boundary/test_u_cli_01.py` · `test_u_cli_rejections.py` (U-CLI-02~05 parametrize) → `golden_loader.load_golden_master(name)`
 - **대응 ID:** [reference.md](../.cursor/skills/unit-conversion-tdd/reference.md) U-CLI-*
 
 ## 승인 절차
