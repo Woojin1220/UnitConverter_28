@@ -79,6 +79,8 @@ D-CONV-03: 8.2021 feet → 2.734025 yard (meter 경유)
 
 ### Track A — UI (`tests/boundary/`)
 
+Golden Master는 **UI Track(boundary)만** 사용합니다. Logic Track(`D-*`)은 `tests/entity/`·`tests/control/`에서 도메인 값·예외를 직접 검증합니다. 상세: [`golden/README.md`](./golden/README.md).
+
 | Test ID | 작업 | 상태 |
 |---------|------|------|
 | U-CLI-01 | G1 변환 Golden Master + `main()` capsys | ✅ GREEN |

@@ -1,4 +1,7 @@
-"""Golden Master loader — reads approved output from golden/ SSOT."""
+"""Golden Master loader — reads approved CLI output from golden/ SSOT.
+
+UI Track (boundary) only. Logic Track tests do not use this module.
+"""
 
 from pathlib import Path
 

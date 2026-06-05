@@ -45,7 +45,8 @@
 
 ## UI Track — Golden Master (`tests/boundary/`)
 
-> Logic GREEN 후 · SSOT: `golden/<case>/output.txt` + `approval.yaml`
+> **boundary 전용** — Logic Track(`D-*`, entity/control)은 Golden Master를 쓰지 않습니다.  
+> Logic GREEN 후 · SSOT: `golden/<case>/output.txt` + `approval.yaml` · 로더: `tests/boundary/golden_loader.py`
 
 | ID | 파일 | 함수 | 입력 | 요약 |
 |----|------|------|------|------|

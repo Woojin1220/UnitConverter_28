@@ -2,6 +2,17 @@
 
 승인된 CLI 출력 기준선과 승인 이력을 보관합니다.
 
+## 범위 (Dual-Track)
+
+Golden Master는 **boundary(UI Track) 전용**입니다. entity·control(Logic Track, `D-*`)은 숫자·예외·dict 등을 **직접 assert**하고, CLI stdout 전체 계약만 `golden/`에 둡니다.
+
+| Track | Layer | 검증 | Golden Master |
+|-------|-------|------|---------------|
+| Logic (`D-*`) | entity, control | `tests/entity/`, `tests/control/` | 사용 안 함 |
+| UI (`U-*`) | boundary | `tests/boundary/` | `golden/<case>/output.txt` |
+
+향후 JSON/CSV 등 출력 형식이 생겨도 boundary Golden Master로 확장하고, 변환·검증 로직은 Logic Track assert를 유지합니다.
+
 ## 구조
 
 ```
