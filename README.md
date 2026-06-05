@@ -64,9 +64,9 @@ D-CONV-03: 8.2021 feet → 2.734025 yard (meter 경유, D-CONV-02와 일치)
 
 | Test ID | RED 작업 | pytest (예시) | 상태 |
 |---------|----------|---------------|------|
-| D-LOC-01 | `test_d_loc_01.py` — `convert_length()` · G1 meter→feet | `pytest tests/entity/test_d_loc_01.py::test_d_loc_01_blank_coords_row_major -v` | ✅ RED |
-| D-CONV-02 | `test_d_conv_01.py` — `convert_length()` · G1 meter→yard | `pytest tests/entity/test_d_conv_01.py::test_d_conv_02_meter_to_yard -v` | ⏳ |
-| D-CONV-03 | `test_d_conv_01.py` — `convert_length()` · G1 feet→yard | `pytest tests/entity/test_d_conv_01.py::test_d_conv_03_feet_to_yard -v` | ⏳ |
+| D-LOC-01 | `test_d_loc_01.py` — `convert_length()` · G1 meter→feet | `pytest tests/entity/test_d_loc_01.py::test_d_loc_01_meter_to_feet -v` | ✅ RED |
+| D-LOC-02 | `test_d_loc_01.py` — `convert_length()` · G1 meter→yard | `pytest tests/entity/test_d_loc_01.py::test_d_loc_02_meter_to_yard -v` | ✅ RED |
+| D-LOC-03 | `test_d_loc_01.py` — `convert_length()` · G1 feet→yard | `pytest tests/entity/test_d_loc_01.py::test_d_loc_03_feet_to_yard -v` | ✅ RED |
 | D-CONV-04 | `test_d_conv_04.py` — 단일 입력 → 전 단위 변환 결과 | `pytest tests/control/test_d_conv_04.py -v` | ⏳ |
 | D-CONV-05 | `test_d_conv_05.py` — 입력 단위 제외 출력 목록 | `pytest tests/control/test_d_conv_05.py -v` | ⏳ |
 | D-VAL-01 | `test_d_val_01.py` — 음수 값 거부 | `pytest tests/entity/test_d_val_01.py -v` | ⏳ |
@@ -89,7 +89,7 @@ D-CONV-03: 8.2021 feet → 2.734025 yard (meter 경유, D-CONV-02와 일치)
 
 ### RED 완료 게이트
 
-- [ ] Loop 1 entity: `pytest tests/entity/test_d_conv_01.py -v` — D-CONV-01~03 RED FAIL 확보
+- [x] Loop 1 entity: `pytest tests/entity/test_d_loc_01.py -v` — D-LOC-01~03 RED FAIL 확보
 - [ ] Loop 1 control: `pytest tests/control/ -v` — D-CONV-04~05 RED FAIL 확보
 - [ ] 이후 GREEN → REFACTOR (`.cursor/commands/tdd-red.md` 참고)
 
