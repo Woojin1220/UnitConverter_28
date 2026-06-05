@@ -47,7 +47,9 @@ context = f"""[UnitConverter - Session Init]
 - 전체: pytest -q
 
 ## Golden Master
-- fixtures: tests/boundary/fixtures/
+- SSOT: golden/ (output.txt + approval.yaml per case)
+- index: golden/manifest.yaml
+- loader: tests/boundary/golden_loader.py
 - 재생성: 사용자 명시 승인 후 CURSOR_GM_APPROVED=1 일 때만
 
 ## 참고

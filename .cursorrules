@@ -32,7 +32,7 @@ entity/     # 도메인 규칙, 변환 비율, 값 객체, 순수 로직
 | **UI** | `boundary/` | **허용** — control·stdin/stdout만 mock/stub; entity 직접 mock 금지 |
 
 - Logic Track과 UI Track은 같은 기능이라도 **별도 테스트 파일**로 분리한다.
-- UI Track Golden Master 스냅샷은 `tests/boundary/fixtures/`에 둔다. 기대값 변경·재생성은 **사용자 명시 승인** 없이 하지 않는다.
+- UI Track Golden Master 스냅샷·승인 이력은 `golden/`에 둔다 (`output.txt` + `approval.yaml`). 기대값 변경·재생성은 **사용자 명시 승인** 없이 하지 않는다.
 
 ## 테스트 ID · 파일명
 

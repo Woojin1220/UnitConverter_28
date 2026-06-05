@@ -2,7 +2,7 @@
 
 **버전:** 0.1  
 **작성일:** 2026-06-05  
-**근거:** Mom Test Problem Definition Report (`Report/2.ProblemDefinition_Report.md`)
+**근거:** Mom Test Problem Definition Report (`Report/2. ProblemDefinition_Report.md`)
 
 ---
 
@@ -164,7 +164,7 @@ pytest
 
 ## 8. 참고
 
-- Mom Test 보고서: `Report/mom-test-report.md`
-- Problem Definition: `Report/2.ProblemDefinition_Report.md`
-- 인터뷰 트랜스크립트: `Prompt/mom-test-transcript.md`
+- Mom Test 보고서: `Report/1. mom-test-report.md`
+- Problem Definition: `Report/2. ProblemDefinition_Report.md`
+- 인터뷰 트랜스크립트: `Prompt/1. mom-test-transcript.md`
 - 프로젝트 README: `README.md`
