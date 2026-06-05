@@ -39,6 +39,7 @@
 | **Entity** | 변환 비율·순수 변환·검증 | `convert_length()`, `constants.py`, `registry.py` |
 | **Control** | 파싱·유스케이스 조율 | `parse_input()`, `convert_all()`, `convert_excluding_input()` |
 | **Boundary** | CLI·입출력 | `src/boundary/cli.py` · `UnitConverter.py` thin wrapper |
+| **Boundary (GUI)** | PyQt 화면 | `src/boundary/qt_app.py` · `UnitConverterGUI.py` |
 
 - **Dual-Track TDD:** Logic `D-*` (`tests/entity`, `tests/control`) + UI `U-*` (`tests/boundary`)
 - **RED 우선:** pytest FAIL → GREEN → REFACTOR
@@ -46,7 +47,7 @@
 
 ---
 
-> **누적 진행 SSOT:** [Report/8. UnitConverter_Progress_Summary_Report.md](./docs/Report/8.%20UnitConverter_Progress_Summary_Report.md)
+> **최신 진행:** [Report/9. UnitConverter_PostGREEN_GUI_Report.md](./docs/Report/9.%20UnitConverter_PostGREEN_GUI_Report.md) · [Report/8 — GREEN SSOT](./docs/Report/8.%20UnitConverter_Progress_Summary_Report.md)
 
 ## TDD 진행 목록
 
@@ -138,7 +139,8 @@ Logic RED 게이트: 12 failed (의도) → GREEN 12 passed.
 
 ```
 UnitConverter_28/
-├── UnitConverter.py              # boundary thin wrapper → src/boundary/cli
+├── UnitConverter.py              # CLI — boundary thin wrapper → src/boundary/cli
+├── UnitConverterGUI.py           # GUI — PyQt6 → src/boundary/qt_app
 ├── README.md
 ├── .cursorrules                  # ECB · Dual-Track · TDD 정책
 ├── pyproject.toml                # pytest testpaths · pythonpath=src
@@ -152,7 +154,8 @@ UnitConverter_28/
 │   │   ├── 5. UnitConverter_RED_Skeleton_Report.md
 │   │   ├── 6. UnitConverter_Logic_RED_Complete_Report.md
 │   │   ├── 7. UnitConverter_GREEN_Complete_Report.md
-│   │   └── 8. UnitConverter_Progress_Summary_Report.md   # 누적 SSOT
+│   │   ├── 8. UnitConverter_Progress_Summary_Report.md   # GREEN 시점 SSOT
+│   │   └── 9. UnitConverter_PostGREEN_GUI_Report.md    # Post-GREEN · GUI
 │   └── Prompt/
 │       ├── 1. mom-test-transcript.md
 │       ├── 2. ProblemDefinition-transcript.md
@@ -161,11 +164,12 @@ UnitConverter_28/
 │       ├── 5. UnitConverter_RED_Skeleton-Transcript.md
 │       ├── 6. UnitConverter_Logic_RED_Complete-Transcript.md
 │       ├── 7. UnitConverter_GREEN_Complete-Transcript.md
-│       └── 8. UnitConverter_Progress_Export-Transcript.md
+│       ├── 8. UnitConverter_Progress_Export-Transcript.md
+│       └── 9. UnitConverter_PostGREEN_GUI-Transcript.md
 ├── src/
 │   ├── entity/                   # 변환·비율 (순수 로직)
 │   ├── control/                  # 파싱·유스케이스
-│   └── boundary/                 # CLI·I/O
+│   └── boundary/                 # cli.py · qt_app.py (GUI)
 ├── tests/
 │   ├── conftest.py               # G1·검증·확장 픽스처 (데이터만)
 │   ├── entity/                   # test_d_conv_*.py, test_d_val_*.py, test_d_ext_*.py
@@ -186,30 +190,79 @@ UnitConverter_28/
 
 ## Setup & Run
 
-```bash
-# 가상환경 생성
-python -m venv venv
+### 1. 가상환경(venv) 만들기 (최초 1회)
 
-# 가상환경 활성화 (Windows)
+```bash
+# 프로젝트 루트에서
+cd UnitConverter_28
+
+python -m venv venv
+```
+
+### 2. 가상환경 활성화
+
+```bash
+# Windows (PowerShell / CMD)
 venv\Scripts\activate
 
-# 가상환경 활성화 (macOS/Linux)
+# macOS / Linux
 source venv/bin/activate
+```
 
-# 실행
+프롬프트 앞에 `(venv)`가 보이면 활성화된 상태입니다.
+
+### 3. 패키지 설치 (최초 1회 · venv 활성화 후)
+
+```bash
+pip install -r requirements.txt
+```
+
+회사망 등에서 SSL 오류가 나면:
+
+```bash
+pip install --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host files.pythonhosted.org -r requirements.txt
+```
+
+또는 개별 설치:
+
+```bash
+pip install pytest PyQt6
+```
+
+### 4. 실행
+
+```bash
+# CLI (터미널)
 python UnitConverter.py
+# 예: meter:2.5 입력 → feet, yard 변환 결과 출력
 
-# 테스트 — Layer별
+# GUI (PyQt6)
+python UnitConverterGUI.py
+```
+
+### 5. 테스트
+
+```bash
 pytest tests/entity -q
 pytest tests/control -q
 pytest tests/boundary -q
+pytest -q          # 전체 (GREEN: 18 passed)
+```
 
-# 전체 (GREEN: 18 passed)
-pytest -q
+### 6. 가상환경 종료
 
-# 가상환경 비활성화
+```bash
 deactivate
 ```
+
+### GUI 사용법
+
+1. **값** 입력란에 숫자 입력 (예: `2.5`)
+2. **단위** 드롭다운에서 `meter` / `feet` / `yard` 선택
+3. **변환** 클릭 (또는 Enter) → 입력 단위를 제외한 변환 결과 표시
+4. 잘못된 값(음수, 숫자 아님 등)은 CLI와 동일한 검증 메시지로 표시
+
+> GUI는 `boundary/cli.process()`를 재사용하므로 변환·검증 로직은 CLI와 동일합니다.
 
 ---
 
@@ -298,11 +351,13 @@ meter:2.5
 | [Report/5. UnitConverter_RED_Skeleton_Report.md](./docs/Report/5.%20UnitConverter_RED_Skeleton_Report.md) | RED 스켈레톤 · D-CONV-01 FAIL |
 | [Report/6. UnitConverter_Logic_RED_Complete_Report.md](./docs/Report/6.%20UnitConverter_Logic_RED_Complete_Report.md) | Logic RED 12건 완료 |
 | [Report/7. UnitConverter_GREEN_Complete_Report.md](./docs/Report/7.%20UnitConverter_GREEN_Complete_Report.md) | GREEN · Golden Master · convert_all 정리 |
-| [Report/8. UnitConverter_Progress_Summary_Report.md](./docs/Report/8.%20UnitConverter_Progress_Summary_Report.md) | **누적 진행 SSOT** · REFACTOR 백로그 |
+| [Report/8. UnitConverter_Progress_Summary_Report.md](./docs/Report/8.%20UnitConverter_Progress_Summary_Report.md) | GREEN 시점 누적 SSOT · REFACTOR 백로그 |
+| [Report/9. UnitConverter_PostGREEN_GUI_Report.md](./docs/Report/9.%20UnitConverter_PostGREEN_GUI_Report.md) | **Post-GREEN** · GUI · venv · docs/golden 정리 |
 | [Prompt/4. UnitConverter_RED_Design-Transcript.md](./docs/Prompt/4.%20UnitConverter_RED_Design-Transcript.md) | 세션 4 Transcript |
 | [Prompt/5. UnitConverter_RED_Skeleton-Transcript.md](./docs/Prompt/5.%20UnitConverter_RED_Skeleton-Transcript.md) | 세션 5 Transcript |
 | [Prompt/6. UnitConverter_Logic_RED_Complete-Transcript.md](./docs/Prompt/6.%20UnitConverter_Logic_RED_Complete-Transcript.md) | 세션 6 Transcript |
 | [Prompt/7. UnitConverter_GREEN_Complete-Transcript.md](./docs/Prompt/7.%20UnitConverter_GREEN_Complete-Transcript.md) | 세션 7 GREEN Transcript |
 | [Prompt/8. UnitConverter_Progress_Export-Transcript.md](./docs/Prompt/8.%20UnitConverter_Progress_Export-Transcript.md) | 세션 8 Export Transcript |
+| [Prompt/9. UnitConverter_PostGREEN_GUI-Transcript.md](./docs/Prompt/9.%20UnitConverter_PostGREEN_GUI-Transcript.md) | 세션 9 GUI · venv Transcript |
 | [Mom Test Report](./docs/Report/1.%20mom-test-report.md) | 인터뷰 증거 |
 | [Problem Definition Report](./docs/Report/2.%20ProblemDefinition_Report.md) | R-G-I-O · SC1~3 |

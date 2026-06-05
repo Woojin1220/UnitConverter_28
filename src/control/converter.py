@@ -43,3 +43,7 @@ def run_conversion(raw: str) -> tuple[float, str, dict[str, float]]:
     except EntityValidationError as exc:
         raise ValidationError(str(exc)) from exc
     return value, unit, conversions
+
+
+def supported_units() -> list[str]:
+    return sorted(get_registered_units().keys())
