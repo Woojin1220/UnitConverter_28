@@ -64,18 +64,18 @@ D-CONV-03: 8.2021 feet → 2.734025 yard (meter 경유, D-CONV-02와 일치)
 
 | Test ID | RED 작업 | pytest (예시) | 상태 |
 |---------|----------|---------------|------|
-| D-LOC-01 | `test_d_loc_01.py` — `convert_length()` · G1 meter→feet | `pytest tests/entity/test_d_loc_01.py::test_d_loc_01_meter_to_feet -v` | ✅ RED |
-| D-LOC-02 | `test_d_loc_01.py` — `convert_length()` · G1 meter→yard | `pytest tests/entity/test_d_loc_01.py::test_d_loc_02_meter_to_yard -v` | ✅ RED |
-| D-LOC-03 | `test_d_loc_01.py` — `convert_length()` · G1 feet→yard | `pytest tests/entity/test_d_loc_01.py::test_d_loc_03_feet_to_yard -v` | ✅ RED |
-| D-CONV-04 | `test_d_conv_04.py` — 단일 입력 → 전 단위 변환 결과 | `pytest tests/control/test_d_conv_04.py -v` | ⏳ |
-| D-CONV-05 | `test_d_conv_05.py` — 입력 단위 제외 출력 목록 | `pytest tests/control/test_d_conv_05.py -v` | ⏳ |
-| D-VAL-01 | `test_d_val_01.py` — 음수 값 거부 | `pytest tests/entity/test_d_val_01.py -v` | ⏳ |
-| D-VAL-02 | `test_d_val_02.py` — 잘못된 숫자 거부 | `pytest tests/entity/test_d_val_02.py -v` | ⏳ |
-| D-VAL-03 | `test_d_val_03.py` — 미등록 단위 거부 | `pytest tests/entity/test_d_val_03.py -v` | ⏳ |
-| D-VAL-04 | `test_d_val_04.py` — 콜론 없는 형식 거부 | `pytest tests/control/test_d_val_04.py -v` | ⏳ |
-| D-VAL-05 | `test_d_val_05.py` — `단위:값` 파싱 성공 | `pytest tests/control/test_d_val_05.py -v` | ⏳ |
-| D-EXT-01 | `test_d_ext_01.py` — 새 단위 등록 후 전체 변환 | `pytest tests/entity/test_d_ext_01.py -v` | ⏳ |
-| D-EXT-02 | `test_d_ext_02.py` — 등록만으로 확장 (OCP) | `pytest tests/entity/test_d_ext_02.py -v` | ⏳ |
+| D-CONV-01 | `test_d_conv_01.py` — `convert_length()` · G1 meter→feet | `pytest tests/entity/test_d_conv_01.py::test_d_conv_01_meter_to_feet -v` | ✅ RED |
+| D-CONV-02 | `test_d_conv_01.py` — `convert_length()` · G1 meter→yard | `pytest tests/entity/test_d_conv_01.py::test_d_conv_02_meter_to_yard -v` | ✅ RED |
+| D-CONV-03 | `test_d_conv_01.py` — `convert_length()` · G1 feet→yard | `pytest tests/entity/test_d_conv_01.py::test_d_conv_03_feet_to_yard -v` | ✅ RED |
+| D-CONV-04 | `test_d_conv_04.py` — 단일 입력 → 전 단위 변환 결과 | `pytest tests/control/test_d_conv_04.py -v` | ✅ RED |
+| D-CONV-05 | `test_d_conv_05.py` — 입력 단위 제외 출력 목록 | `pytest tests/control/test_d_conv_05.py -v` | ✅ RED |
+| D-VAL-01 | `test_d_val_01.py` — 음수 값 거부 | `pytest tests/entity/test_d_val_01.py -v` | ✅ RED |
+| D-VAL-02 | `test_d_val_02.py` — 잘못된 숫자 거부 | `pytest tests/entity/test_d_val_02.py -v` | ✅ RED |
+| D-VAL-03 | `test_d_val_03.py` — 미등록 단위 거부 | `pytest tests/entity/test_d_val_03.py -v` | ✅ RED |
+| D-VAL-04 | `test_d_val_04.py` — 콜론 없는 형식 거부 | `pytest tests/control/test_d_val_04.py -v` | ✅ RED |
+| D-VAL-05 | `test_d_val_05.py` — `단위:값` 파싱 성공 | `pytest tests/control/test_d_val_05.py -v` | ✅ RED |
+| D-EXT-01 | `test_d_ext_01.py` — 새 단위 등록 후 전체 변환 | `pytest tests/entity/test_d_ext_01.py -v` | ✅ RED |
+| D-EXT-02 | `test_d_ext_02.py` — 등록만으로 확장 (OCP) | `pytest tests/entity/test_d_ext_02.py -v` | ✅ RED |
 
 **Logic RED 게이트:** 각 ID마다 터미널 **FAILED** (`ModuleNotFoundError` / `pytest.fail("RED: D-xxx …")`) 확인 후 GREEN.
 
@@ -89,8 +89,11 @@ D-CONV-03: 8.2021 feet → 2.734025 yard (meter 경유, D-CONV-02와 일치)
 
 ### RED 완료 게이트
 
-- [x] Loop 1 entity: `pytest tests/entity/test_d_loc_01.py -v` — D-LOC-01~03 RED FAIL 확보
-- [ ] Loop 1 control: `pytest tests/control/ -v` — D-CONV-04~05 RED FAIL 확보
+- [x] Loop 1 entity: `pytest tests/entity/test_d_conv_01.py -v` — D-CONV-01~03
+- [x] Loop 2 entity: `pytest tests/entity/test_d_val_*.py -v` — D-VAL-01~03
+- [x] Loop 3 entity: `pytest tests/entity/test_d_ext_*.py -v` — D-EXT-01~02
+- [x] Loop 1~2 control: `pytest tests/control/ -v` — D-CONV-04~05, D-VAL-04~05
+- [x] Logic 전체 RED: `pytest tests/entity tests/control -v` — **12 failed** (의도)
 - [ ] 이후 GREEN → REFACTOR (`.cursor/commands/tdd-red.md` 참고)
 
 ---
@@ -104,7 +107,7 @@ D-CONV-03: 8.2021 feet → 2.734025 yard (meter 경유, D-CONV-02와 일치)
 | D-CONV-03 | FR-2 | entity | feet → yard (meter 경유) |
 | D-CONV-04 | FR-3 | control | 단일 입력 → 전 단위 결과 |
 | D-CONV-05 | FR-3 | control | 입력 단위 제외 목록 |
-| D-VAL-01~03 | FR-4 | entity | 음수·형식·미등록 단위 거부 |
+| D-VAL-01~03 | FR-4 | entity | 음수·잘못된 숫자·미등록 단위 거부 |
 | D-VAL-04~05 | FR-1, FR-4 | control | 파싱·형식 검증 |
 | D-EXT-01~02 | FR-5, SC2 | entity | OCP 단위 확장 |
 
@@ -139,7 +142,7 @@ UnitConverter_28/
 │   ├── control/                  # 파싱·유스케이스
 │   └── boundary/                 # CLI·I/O
 ├── tests/
-│   ├── conftest.py               # G1 픽스처 (RED 예정)
+│   ├── conftest.py               # G1·검증·확장 픽스처 (데이터만)
 │   ├── entity/                   # test_d_conv_*.py, test_d_val_*.py
 │   ├── control/
 │   └── boundary/                 # test_u_*.py
@@ -171,8 +174,11 @@ python UnitConverter.py
 # 테스트 — Layer 작업 중
 pytest tests/entity -q
 
-# RED — 현재 묶음 (D-CONV-01~03)
-pytest tests/entity/test_d_conv_01.py -v
+# RED — Logic 전체 (현재 12건 의도적 FAIL)
+pytest tests/entity tests/control -v
+
+# RED — 단일 ID
+pytest tests/entity/test_d_conv_01.py::test_d_conv_01_meter_to_feet -v
 
 # 전체 (Phase 종료·REFACTOR 후)
 pytest -q
@@ -249,9 +255,9 @@ meter:2.5
 
 ## 다음 단계
 
-1. `/green-minimal` — `src/entity/constants.py` + `conversion.py` (D-LOC-01 GREEN)
-2. D-CONV-02~03 RED 확장 또는 동일 파일 추가
-3. entity GREEN 후 control `D-CONV-04`~`05` RED
+1. `/green-minimal` — `src/entity/constants.py` + `conversion.py` (D-CONV-01 GREEN)
+2. entity D-CONV-02~03 → D-VAL-* → D-EXT-* 순차 GREEN
+3. entity Layer `pytest tests/entity -q` 통과 후 control GREEN
 4. Logic Track 완료 후 boundary `U-*` RED
 
 ---
@@ -265,7 +271,7 @@ meter:2.5
 | [reference.md](./.cursor/skills/unit-conversion-tdd/reference.md) | **D-* 테스트 ID** |
 | [Report/3. AI-Layer-Setup_Report.md](./Report/3.%20AI-Layer-Setup_Report.md) | Harness · Hook · 8계층 |
 | [Report/4. UnitConverter_RED_Design_Report.md](./Report/4.%20UnitConverter_RED_Design_Report.md) | RED 설계 · C2C · G1 격자 |
-| [Report/5. UnitConverter_RED_Skeleton_Report.md](./Report/5.%20UnitConverter_RED_Skeleton_Report.md) | RED 스켈레톤 · D-LOC-01 FAIL |
+| [Report/5. UnitConverter_RED_Skeleton_Report.md](./Report/5.%20UnitConverter_RED_Skeleton_Report.md) | RED 스켈레톤 · D-CONV-01 FAIL |
 | [Prompt/4. UnitConverter_RED_Design-Transcript.md](./Prompt/4.%20UnitConverter_RED_Design-Transcript.md) | 세션 4 Transcript |
 | [Prompt/5. UnitConverter_RED_Skeleton-Transcript.md](./Prompt/5.%20UnitConverter_RED_Skeleton-Transcript.md) | 세션 5 Transcript |
 | [Mom Test Report](./Report/1.%20mom-test-report.md) | 인터뷰 증거 |
