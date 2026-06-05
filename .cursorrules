@@ -1,0 +1,100 @@
+# UnitConverter — ECB + Dual-Track TDD
+
+## 아키텍처 (ECB)
+
+의존 방향은 단방향이다: **boundary → control → entity**
+
+```
+boundary/   # 입출력, CLI, 포맷, 사용자 상호작용
+control/    # 유스케이스 조율, entity 호출, 흐름 제어
+entity/     # 도메인 규칙, 변환 비율, 값 객체, 순수 로직
+```
+
+- `entity`는 `control`, `boundary`를 import하지 않는다.
+- `control`은 `entity`만 import한다. `boundary`를 import하지 않는다.
+- `boundary`는 `control`만 호출한다. `entity`를 직접 import·호출하지 않는다.
+- 변환 비율은 meter 기준으로 통일한다 (PRD).
+- 설계 원칙: OCP(단위 추가 시 확장), SRP(입력 검증 / 변환 / 출력 분리).
+- 루트 `UnitConverter.py`는 boundary 진입점 thin wrapper로만 유지하고, 도메인 로직은 `src/`에만 둔다.
+
+## 입출력 계약
+
+- 입력: `단위:값` 형식만 허용 (예: `meter:2.5`).
+- 출력: `{값} {단위} = {변환값} {대상단위}` 한 줄씩. 입력 단위는 출력에서 제외한다.
+- 거부 조건: 음수, 콜론 없음·잘못된 형식, 미등록 단위 (PRD FR-4).
+- Logic Track은 예외·Result 객체로 검증하고, UI Track은 capsys/capfd로 stdout/stderr 메시지를 검증한다.
+
+## Dual-Track TDD
+
+| Track | 대상 | Mock |
+|-------|------|------|
+| **Logic** | `entity/`, `control/` | **금지** — `unittest.mock`, `pytest` mock, `monkeypatch`로 domain·entity·control 패치 금지 |
+| **UI** | `boundary/` | **허용** — control·stdin/stdout만 mock/stub; entity 직접 mock 금지 |
+
+- Logic Track과 UI Track은 같은 기능이라도 **별도 테스트 파일**로 분리한다.
+- UI Track Golden Master 스냅샷은 `tests/boundary/fixtures/`에 둔다. 기대값 변경·재생성은 **사용자 명시 승인** 없이 하지 않는다.
+
+## 테스트 ID · 파일명
+
+| Track | ID 접두어 | 파일명 패턴 | 위치 |
+|-------|-----------|-------------|------|
+| Logic | `D-*` | `test_d_*.py` | `tests/entity/`, `tests/control/` |
+| UI | `U-*` | `test_u_*.py` | `tests/boundary/` |
+
+예: `D-CONV-01`, `U-CLI-01`. 테스트 함수 docstring 또는 주석에 ID를 명시한다.
+테스트는 src 레이어와 1:1 대응하되, tests가 상위 레이어를 import해 ECB를 우회하지 않는다.
+
+## TDD 루프
+
+1. **RED** — 실패하는 테스트를 먼저 작성한다.
+2. **GREEN** — 테스트를 통과하는 최소 구현만 추가한다.
+3. **REFACTOR** — 동작 유지하며 구조를 개선한다.
+
+**구현 순서:** entity → control → boundary. 상위 Layer는 하위 Layer `pytest` 통과 후에만 시작한다.
+**Phase 전환 게이트:**
+- RED: 해당 Layer 테스트가 의도적으로 실패(exit ≠ 0)한 뒤에만 GREEN.
+- GREEN: 해당 Layer 전체 `pytest` 통과 후에만 REFACTOR.
+- REFACTOR: 전체 `pytest` 통과를 유지한다.
+
+**금지 사항:**
+- assert 완화(기대값 느슨하게 변경, 조건 삭제, `pytest.approx`로 정밀도 임의 완화)
+- `@pytest.mark.skip`, `xfail`, `pass`로 RED 우회
+- 테스트 삭제·이름 변경으로 RED 제거
+- 테스트 없이 구현 선행
+- GREEN에서 요청 범위 밖 기능 추가
+
+## Test Loop 매핑 (PRD §6.4)
+
+```
+Loop 1 — 변환 정확성 (SC1, SC3): tests/entity D-* → tests/control D-*
+Loop 2 — 입력 검증 (SC3):        tests/entity|control D-*
+Loop 3 — 확장성 (SC2):           tests/entity D-*
+UI Track (U-*):                  해당 Logic Layer GREEN 후에만 RED
+```
+
+## pytest · Review
+
+```bash
+pytest tests/<layer> -q    # Layer 작업 중
+pytest -q                  # Phase 종료·REFACTOR 후 전체 통과 필수
+```
+
+## Hook 경계 (본 Rule과 중복 금지)
+
+- **Rule(정책):** ECB, Mock, TDD 게이트, Golden Master 승인 원칙, AI 행동.
+- **Hook(강제):** afterFileEdit→pytest 자동 실행, beforeShellExecution→스냅샷 재생성 차단, skip/xfail 정적 검사.
+
+## AI 행동 규칙
+
+- 사용자와의 대화·설명은 **한국어**로 한다.
+- TDD 작업 시 매 응답 상단에 현재 상태를 선언한다:
+
+  ```
+  Phase: RED | GREEN | REFACTOR
+  Layer: entity | control | boundary
+  Track: Logic (D-*) | UI (U-*)
+  ```
+
+- 한 번에 한 Phase·한 Layer만 진행한다.
+- 요청 범위 밖 파일·기능은 추가하지 않는다.
+- Mom Test 기준: 이 변경이 "매번 찾기·재확인 없이 즉시 변환"에 기여하는지 SC1~3에 대조한다.

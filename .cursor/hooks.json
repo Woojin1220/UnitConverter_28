@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "hooks": {
+    "sessionStart": [
+      {
+        "command": ".cursor/hooks/session-init.sh",
+        "timeout": 15
+      }
+    ],
+    "afterFileEdit": [
+      {
+        "command": ".cursor/hooks/after-file-edit.sh",
+        "timeout": 130
+      }
+    ],
+    "beforeShellExecution": [
+      {
+        "command": ".cursor/hooks/deny-snapshot-regen.sh",
+        "matcher": "--snapshot-update|--update-snapshots|fixtures/|--force",
+        "failClosed": true,
+        "timeout": 10
+      }
+    ],
+    "stop": [
+      {
+        "command": ".cursor/hooks/run-full-pytest-review.sh",
+        "timeout": 190,
+        "loop_limit": 2
+      }
+    ]
+  }
+}
