@@ -19,13 +19,19 @@ from PyQt6.QtWidgets import (
 from boundary.cli import process
 from control.converter import supported_units
 
+MIN_WIDTH = 460
+MIN_HEIGHT = 380
+ERROR_COLOR = "#c0392b"
+
 
 class MainWindow(QMainWindow):
     def __init__(self) -> None:
         super().__init__()
         self.setWindowTitle("Unit Converter")
-        self.setMinimumSize(460, 380)
+        self.setMinimumSize(MIN_WIDTH, MIN_HEIGHT)
+        self._build_ui()
 
+    def _build_ui(self) -> None:
         root = QWidget()
         self.setCentralWidget(root)
         layout = QVBoxLayout(root)
@@ -67,7 +73,7 @@ class MainWindow(QMainWindow):
         layout.addWidget(self.result_view)
 
         self.status_label = QLabel("")
-        self.status_label.setStyleSheet("color: #c0392b;")
+        self.status_label.setStyleSheet(f"color: {ERROR_COLOR};")
         layout.addWidget(self.status_label)
 
     def clear(self) -> None:
@@ -87,13 +93,13 @@ class MainWindow(QMainWindow):
 
         unit = self.unit_combo.currentText()
         raw = f"{unit}:{raw_value}"
-        lines = process(raw)
+        result = process(raw, format_numbers=True)
 
-        if len(lines) == 1 and "=" not in lines[0]:
-            self.status_label.setText(lines[0])
+        if not result.ok:
+            self.status_label.setText(result.lines[0])
             return
 
-        self.result_view.setPlainText("\n".join(lines))
+        self.result_view.setPlainText("\n".join(result.lines))
 
     def keyPressEvent(self, event) -> None:  # noqa: N802
         if event.key() == Qt.Key.Key_Escape:
