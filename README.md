@@ -130,13 +130,15 @@ UnitConverter_28/
 │   ├── 2. ProblemDefinition_Report.md
 │   ├── 3. AI-Layer-Setup_Report.md
 │   ├── 4. UnitConverter_RED_Design_Report.md
-│   └── 5. UnitConverter_RED_Skeleton_Report.md
+│   ├── 5. UnitConverter_RED_Skeleton_Report.md
+│   └── 6. UnitConverter_Logic_RED_Complete_Report.md
 ├── Prompt/
 │   ├── 1. mom-test-transcript.md
 │   ├── 2. ProblemDefinition-transcript.md
 │   ├── 3. AI-Layer-Setup-transcript.md
 │   ├── 4. UnitConverter_RED_Design-Transcript.md
-│   └── 5. UnitConverter_RED_Skeleton-Transcript.md
+│   ├── 5. UnitConverter_RED_Skeleton-Transcript.md
+│   └── 6. UnitConverter_Logic_RED_Complete-Transcript.md
 ├── src/
 │   ├── entity/                   # 변환·비율 (순수 로직)
 │   ├── control/                  # 파싱·유스케이스
@@ -272,7 +274,9 @@ meter:2.5
 | [Report/3. AI-Layer-Setup_Report.md](./Report/3.%20AI-Layer-Setup_Report.md) | Harness · Hook · 8계층 |
 | [Report/4. UnitConverter_RED_Design_Report.md](./Report/4.%20UnitConverter_RED_Design_Report.md) | RED 설계 · C2C · G1 격자 |
 | [Report/5. UnitConverter_RED_Skeleton_Report.md](./Report/5.%20UnitConverter_RED_Skeleton_Report.md) | RED 스켈레톤 · D-CONV-01 FAIL |
+| [Report/6. UnitConverter_Logic_RED_Complete_Report.md](./Report/6.%20UnitConverter_Logic_RED_Complete_Report.md) | Logic RED 12건 완료 · naming·Harness |
 | [Prompt/4. UnitConverter_RED_Design-Transcript.md](./Prompt/4.%20UnitConverter_RED_Design-Transcript.md) | 세션 4 Transcript |
 | [Prompt/5. UnitConverter_RED_Skeleton-Transcript.md](./Prompt/5.%20UnitConverter_RED_Skeleton-Transcript.md) | 세션 5 Transcript |
+| [Prompt/6. UnitConverter_Logic_RED_Complete-Transcript.md](./Prompt/6.%20UnitConverter_Logic_RED_Complete-Transcript.md) | 세션 6 Transcript |
 | [Mom Test Report](./Report/1.%20mom-test-report.md) | 인터뷰 증거 |
 | [Problem Definition Report](./Report/2.ProblemDefinition_Report.md) | R-G-I-O · SC1~3 |
