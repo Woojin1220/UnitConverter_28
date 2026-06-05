@@ -49,7 +49,7 @@
 
 ### 공통 Harness (RED 선행)
 
-- [ ] `tests/conftest.py` — G1 변환 격자 픽스처 (데이터만, 도메인 로직 없음)
+- [x] `tests/conftest.py` — G1 변환 격자 픽스처 (데이터만, 도메인 로직 없음)
 - [ ] `src/entity/constants.py` — `METER_TO_FEET`, `METER_TO_YARD` SSOT (GREEN 시)
 
 **G1 변환 격자 (RED SSOT)** — anchor `2.5 meter`:
@@ -64,7 +64,7 @@ D-CONV-03: 8.2021 feet → 2.734025 yard (meter 경유, D-CONV-02와 일치)
 
 | Test ID | RED 작업 | pytest (예시) | 상태 |
 |---------|----------|---------------|------|
-| D-CONV-01 | `test_d_conv_01.py` — `convert_length()` · G1 meter→feet | `pytest tests/entity/test_d_conv_01.py::test_d_conv_01_meter_to_feet -v` | ⏳ |
+| D-LOC-01 | `test_d_loc_01.py` — `convert_length()` · G1 meter→feet | `pytest tests/entity/test_d_loc_01.py::test_d_loc_01_blank_coords_row_major -v` | ✅ RED |
 | D-CONV-02 | `test_d_conv_01.py` — `convert_length()` · G1 meter→yard | `pytest tests/entity/test_d_conv_01.py::test_d_conv_02_meter_to_yard -v` | ⏳ |
 | D-CONV-03 | `test_d_conv_01.py` — `convert_length()` · G1 feet→yard | `pytest tests/entity/test_d_conv_01.py::test_d_conv_03_feet_to_yard -v` | ⏳ |
 | D-CONV-04 | `test_d_conv_04.py` — 단일 입력 → 전 단위 변환 결과 | `pytest tests/control/test_d_conv_04.py -v` | ⏳ |
@@ -126,12 +126,14 @@ UnitConverter_28/
 │   ├── 1. mom-test-report.md
 │   ├── 2. ProblemDefinition_Report.md
 │   ├── 3. AI-Layer-Setup_Report.md
-│   └── 4. UnitConverter_RED_Design_Report.md
+│   ├── 4. UnitConverter_RED_Design_Report.md
+│   └── 5. UnitConverter_RED_Skeleton_Report.md
 ├── Prompt/
 │   ├── 1. mom-test-transcript.md
 │   ├── 2. ProblemDefinition-transcript.md
 │   ├── 3. AI-Layer-Setup-transcript.md
-│   └── 4. UnitConverter_RED_Design-Transcript.md
+│   ├── 4. UnitConverter_RED_Design-Transcript.md
+│   └── 5. UnitConverter_RED_Skeleton-Transcript.md
 ├── src/
 │   ├── entity/                   # 변환·비율 (순수 로직)
 │   ├── control/                  # 파싱·유스케이스
@@ -247,8 +249,8 @@ meter:2.5
 
 ## 다음 단계
 
-1. `/red-skeleton` — `tests/conftest.py` G1 픽스처 + `tests/entity/test_d_conv_01.py` RED 스켈레톤 (D-CONV-01~03)
-2. `pytest` **FAILED** 로그 확보 → GREEN은 ID 1묶음씩
+1. `/green-minimal` — `src/entity/constants.py` + `conversion.py` (D-LOC-01 GREEN)
+2. D-CONV-02~03 RED 확장 또는 동일 파일 추가
 3. entity GREEN 후 control `D-CONV-04`~`05` RED
 4. Logic Track 완료 후 boundary `U-*` RED
 
@@ -263,6 +265,8 @@ meter:2.5
 | [reference.md](./.cursor/skills/unit-conversion-tdd/reference.md) | **D-* 테스트 ID** |
 | [Report/3. AI-Layer-Setup_Report.md](./Report/3.%20AI-Layer-Setup_Report.md) | Harness · Hook · 8계층 |
 | [Report/4. UnitConverter_RED_Design_Report.md](./Report/4.%20UnitConverter_RED_Design_Report.md) | RED 설계 · C2C · G1 격자 |
+| [Report/5. UnitConverter_RED_Skeleton_Report.md](./Report/5.%20UnitConverter_RED_Skeleton_Report.md) | RED 스켈레톤 · D-LOC-01 FAIL |
 | [Prompt/4. UnitConverter_RED_Design-Transcript.md](./Prompt/4.%20UnitConverter_RED_Design-Transcript.md) | 세션 4 Transcript |
+| [Prompt/5. UnitConverter_RED_Skeleton-Transcript.md](./Prompt/5.%20UnitConverter_RED_Skeleton-Transcript.md) | 세션 5 Transcript |
 | [Mom Test Report](./Report/1.%20mom-test-report.md) | 인터뷰 증거 |
 | [Problem Definition Report](./Report/2.ProblemDefinition_Report.md) | R-G-I-O · SC1~3 |
