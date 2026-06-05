@@ -2,10 +2,18 @@
 
 import pytest
 
-# --- G1 변환 격자 (Loop 1 entity) ---
+from entity.constants import METER_TO_FEET, METER_TO_YARD
+from entity.registry import reset_registry
+
+
+@pytest.fixture(autouse=True)
+def _reset_unit_registry():
+    reset_registry()
+    yield
+    reset_registry()
+
+# --- G1 변환 격자 (Loop 1 entity) — 비율 SSOT: entity.constants ---
 G1_METER_VALUE = 2.5
-METER_TO_FEET = 3.28084
-METER_TO_YARD = 1.09361
 G1_METER_TO_FEET_EXPECTED = G1_METER_VALUE * METER_TO_FEET  # 8.2021
 G1_METER_TO_YARD_EXPECTED = G1_METER_VALUE * METER_TO_YARD  # 2.734025
 G1_FEET_TO_YARD_VALUE = G1_METER_TO_FEET_EXPECTED
@@ -27,12 +35,17 @@ CUBIT_INPUT = f"cubit:{CUBIT_VALUE}"
 CUBIT_IN_METERS = CUBIT_VALUE * CUBIT_TO_METER  # 0.9144
 
 # --- control 변환 기대 (meter:2.5 입력) ---
+# D-CONV-04: 등록된 전 단위 (입력 단위 포함)
 G1_ALL_CONVERSIONS = {
+    "meter": G1_METER_VALUE,
     "feet": G1_METER_TO_FEET_EXPECTED,
     "yard": G1_METER_TO_YARD_EXPECTED,
 }
-# D-CONV-05: meter 키 없음 (feet·yard만)
-G1_EXCLUDED_INPUT_CONVERSIONS = dict(G1_ALL_CONVERSIONS)
+# D-CONV-05: 입력 단위(meter) 제외
+G1_EXCLUDED_INPUT_CONVERSIONS = {
+    "feet": G1_METER_TO_FEET_EXPECTED,
+    "yard": G1_METER_TO_YARD_EXPECTED,
+}
 
 
 @pytest.fixture

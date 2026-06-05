@@ -20,7 +20,13 @@
 | **SC2** | 새 단위 추가 시 기존 코드 최소 변경 |
 | **SC3** | 테스트 통과 → 제출 전 재확인 불필요 |
 
-상세: [`docs/PRD.md`](./docs/PRD.md) · [`Report/2.ProblemDefinition_Report.md`](./Report/2.ProblemDefinition_Report.md)
+| SC | GREEN 달성 |
+|----|------------|
+| SC1 | ✅ U-CLI-01 (G1 `meter:2.5`) |
+| SC2 | ⚳ entity D-EXT ✅ · CLI FR-9 ❌ |
+| SC3 | ✅ pytest 18 passed |
+
+상세: [`docs/PRD.md`](./docs/PRD.md) · [`Report/2.ProblemDefinition_Report.md`](./Report/2.ProblemDefinition_Report.md) · [**Report 8 — 누적 SSOT**](./Report/8.%20UnitConverter_Progress_Summary_Report.md)
 
 ---
 
@@ -28,11 +34,11 @@
 
 의존 방향: **boundary → control → entity**
 
-| 계층 | 책임 | 후보 |
-|------|------|------|
-| **Entity** | 변환 비율·순수 변환 로직 | `convert_length()`, `constants.py` |
-| **Control** | 파싱·유스케이스 조율 | `UnitConverter`, `InputParser` |
-| **Boundary** | CLI·입출력 | `UnitConverter.py` thin wrapper |
+| 계층 | 책임 | 구현 (GREEN) |
+|------|------|----------------|
+| **Entity** | 변환 비율·순수 변환·검증 | `convert_length()`, `constants.py`, `registry.py` |
+| **Control** | 파싱·유스케이스 조율 | `parse_input()`, `convert_all()`, `convert_excluding_input()` |
+| **Boundary** | CLI·입출력 | `src/boundary/cli.py` · `UnitConverter.py` thin wrapper |
 
 - **Dual-Track TDD:** Logic `D-*` (`tests/entity`, `tests/control`) + UI `U-*` (`tests/boundary`)
 - **RED 우선:** pytest FAIL → GREEN → REFACTOR
@@ -40,61 +46,71 @@
 
 ---
 
-## RED 단계 진행 목록
+> **누적 진행 SSOT:** [Report/8. UnitConverter_Progress_Summary_Report.md](./Report/8.%20UnitConverter_Progress_Summary_Report.md)
 
-> 규칙: **RED 1턴 = 테스트 ID 1묶음** · 변경은 `tests/`만 · `skip`/`xfail` 금지 · Logic Track Domain Mock 금지  
-> 테스트 ID SSOT: [`.cursor/skills/unit-conversion-tdd/reference.md`](./.cursor/skills/unit-conversion-tdd/reference.md)
+## TDD 진행 목록
 
-**권장 순서 (PRD §6.4):** Loop 1 `D-CONV-*` → Loop 2 `D-VAL-*` → Loop 3 `D-EXT-*` → UI `U-*` (Logic GREEN 후)
+> 규칙: **RED → GREEN → REFACTOR** · 테스트 ID SSOT: [reference.md](./.cursor/skills/unit-conversion-tdd/reference.md)  
+> **현재 Phase:** GREEN 완료 · **다음:** REFACTOR
 
-### 공통 Harness (RED 선행)
+### 공통 Harness
 
-- [x] `tests/conftest.py` — G1 변환 격자 픽스처 (데이터만, 도메인 로직 없음)
-- [ ] `src/entity/constants.py` — `METER_TO_FEET`, `METER_TO_YARD` SSOT (GREEN 시)
+- [x] `tests/conftest.py` — G1 격자·검증·확장 픽스처 (비율 SSOT: `entity.constants`)
+- [x] `src/entity/constants.py` — `METER_TO_FEET`, `METER_TO_YARD`
 
-**G1 변환 격자 (RED SSOT)** — anchor `2.5 meter`:
+**G1 변환 격자** — anchor `2.5 meter`:
 
 ```
 D-CONV-01: 2.5 meter → 8.2021 feet    (× 3.28084)
 D-CONV-02: 2.5 meter → 2.734025 yard  (× 1.09361)
-D-CONV-03: 8.2021 feet → 2.734025 yard (meter 경유, D-CONV-02와 일치)
+D-CONV-03: 8.2021 feet → 2.734025 yard (meter 경유)
 ```
 
 ### Track B — Logic (`tests/entity/`, `tests/control/`)
 
-| Test ID | RED 작업 | pytest (예시) | 상태 |
-|---------|----------|---------------|------|
-| D-CONV-01 | `test_d_conv_01.py` — `convert_length()` · G1 meter→feet | `pytest tests/entity/test_d_conv_01.py::test_d_conv_01_meter_to_feet -v` | ✅ RED |
-| D-CONV-02 | `test_d_conv_01.py` — `convert_length()` · G1 meter→yard | `pytest tests/entity/test_d_conv_01.py::test_d_conv_02_meter_to_yard -v` | ✅ RED |
-| D-CONV-03 | `test_d_conv_01.py` — `convert_length()` · G1 feet→yard | `pytest tests/entity/test_d_conv_01.py::test_d_conv_03_feet_to_yard -v` | ✅ RED |
-| D-CONV-04 | `test_d_conv_04.py` — 단일 입력 → 전 단위 변환 결과 | `pytest tests/control/test_d_conv_04.py -v` | ✅ RED |
-| D-CONV-05 | `test_d_conv_05.py` — 입력 단위 제외 출력 목록 | `pytest tests/control/test_d_conv_05.py -v` | ✅ RED |
-| D-VAL-01 | `test_d_val_01.py` — 음수 값 거부 | `pytest tests/entity/test_d_val_01.py -v` | ✅ RED |
-| D-VAL-02 | `test_d_val_02.py` — 잘못된 숫자 거부 | `pytest tests/entity/test_d_val_02.py -v` | ✅ RED |
-| D-VAL-03 | `test_d_val_03.py` — 미등록 단위 거부 | `pytest tests/entity/test_d_val_03.py -v` | ✅ RED |
-| D-VAL-04 | `test_d_val_04.py` — 콜론 없는 형식 거부 | `pytest tests/control/test_d_val_04.py -v` | ✅ RED |
-| D-VAL-05 | `test_d_val_05.py` — `단위:값` 파싱 성공 | `pytest tests/control/test_d_val_05.py -v` | ✅ RED |
-| D-EXT-01 | `test_d_ext_01.py` — 새 단위 등록 후 전체 변환 | `pytest tests/entity/test_d_ext_01.py -v` | ✅ RED |
-| D-EXT-02 | `test_d_ext_02.py` — 등록만으로 확장 (OCP) | `pytest tests/entity/test_d_ext_02.py -v` | ✅ RED |
-
-**Logic RED 게이트:** 각 ID마다 터미널 **FAILED** (`ModuleNotFoundError` / `pytest.fail("RED: D-xxx …")`) 확인 후 GREEN.
+| Test ID | 작업 | 상태 |
+|---------|------|------|
+| D-CONV-01~03 | `convert_length()` · G1 격자 | ✅ GREEN |
+| D-CONV-04 | `convert_all()` — **등록 전 단위** (입력 포함) | ✅ GREEN |
+| D-CONV-05 | `convert_excluding_input()` — 입력 단위 제외 | ✅ GREEN |
+| D-VAL-01~03 | entity 입력 검증 | ✅ GREEN |
+| D-VAL-04~05 | control 파싱 | ✅ GREEN |
+| D-EXT-01~02 | `register_unit()` OCP | ✅ GREEN |
 
 ### Track A — UI (`tests/boundary/`)
 
-> Logic Layer GREEN 후 시작 · control·stdin/stdout mock 허용 · entity 직접 mock 금지
+| Test ID | 작업 | 상태 |
+|---------|------|------|
+| U-CLI-01 | G1 변환 Golden Master + `main()` capsys | ✅ GREEN |
+| U-CLI-02~05 | 검증 Golden Master | ✅ GREEN |
+
+### GREEN 완료 게이트
+
+- [x] Logic: `pytest tests/entity tests/control -q` — **12 passed**
+- [x] UI: `pytest tests/boundary -q` — **6 passed**
+- [x] 전체: `pytest -q` — **18 passed**
+- [x] Golden Master: `tests/boundary/fixtures/u_cli_01~05.stdout`
+- [ ] REFACTOR — 구조 개선·문서 동기화
+
+---
+
+## RED 단계 (완료 · 참고)
+
+<details>
+<summary>RED 12건 스켈레톤 · 의도적 FAIL 이력</summary>
+
+**권장 순서 (PRD §6.4):** Loop 1 `D-CONV-*` → Loop 2 `D-VAL-*` → Loop 3 `D-EXT-*` → UI `U-*`
 
 | Test ID | RED 작업 | 상태 |
 |---------|----------|------|
-| U-CLI-01~ | CLI 입출력·Golden Master | ⏳ (ID 확정 후 `reference.md` 보강) |
+| D-CONV-01~03 | `test_d_conv_01.py` | ✅ RED → GREEN |
+| D-CONV-04~05 | `test_d_conv_04~05.py` | ✅ RED → GREEN |
+| D-VAL-01~05 | entity/control 검증 | ✅ RED → GREEN |
+| D-EXT-01~02 | OCP 확장 | ✅ RED → GREEN |
 
-### RED 완료 게이트
+Logic RED 게이트: 12 failed (의도) → GREEN 12 passed.
 
-- [x] Loop 1 entity: `pytest tests/entity/test_d_conv_01.py -v` — D-CONV-01~03
-- [x] Loop 2 entity: `pytest tests/entity/test_d_val_*.py -v` — D-VAL-01~03
-- [x] Loop 3 entity: `pytest tests/entity/test_d_ext_*.py -v` — D-EXT-01~02
-- [x] Loop 1~2 control: `pytest tests/control/ -v` — D-CONV-04~05, D-VAL-04~05
-- [x] Logic 전체 RED: `pytest tests/entity tests/control -v` — **12 failed** (의도)
-- [ ] 이후 GREEN → REFACTOR (`.cursor/commands/tdd-red.md` 참고)
+</details>
 
 ---
 
@@ -105,11 +121,12 @@ D-CONV-03: 8.2021 feet → 2.734025 yard (meter 경유, D-CONV-02와 일치)
 | D-CONV-01 | FR-2 | entity | meter → feet (**RED 우선 묶음**) |
 | D-CONV-02 | FR-2 | entity | meter → yard |
 | D-CONV-03 | FR-2 | entity | feet → yard (meter 경유) |
-| D-CONV-04 | FR-3 | control | 단일 입력 → 전 단위 결과 |
-| D-CONV-05 | FR-3 | control | 입력 단위 제외 목록 |
+| D-CONV-04 | FR-2 | control | `convert_all()` — 등록 전 단위 (입력 포함, 내부 격자) |
+| D-CONV-05 | FR-3 | control | `convert_excluding_input()` — CLI/boundary 출력 계약 |
 | D-VAL-01~03 | FR-4 | entity | 음수·잘못된 숫자·미등록 단위 거부 |
 | D-VAL-04~05 | FR-1, FR-4 | control | 파싱·형식 검증 |
 | D-EXT-01~02 | FR-5, SC2 | entity | OCP 단위 확장 |
+| U-CLI-01~05 | FR-3, FR-4, SC1 | boundary | Golden Master CLI |
 
 **판단 (entity API):** `convert_length(value, from_unit, to_unit) -> float` 단일 순수 함수로 확정. 입력 검증은 Loop 2(`D-VAL-*`)로 분리.
 
@@ -119,7 +136,7 @@ D-CONV-03: 8.2021 feet → 2.734025 yard (meter 경유, D-CONV-02와 일치)
 
 ```
 UnitConverter_28/
-├── UnitConverter.py              # boundary 진입점 (스타터, 향후 thin wrapper)
+├── UnitConverter.py              # boundary thin wrapper → src/boundary/cli
 ├── README.md
 ├── .cursorrules                  # ECB · Dual-Track · TDD 정책
 ├── pyproject.toml                # pytest testpaths · pythonpath=src
@@ -131,23 +148,27 @@ UnitConverter_28/
 │   ├── 3. AI-Layer-Setup_Report.md
 │   ├── 4. UnitConverter_RED_Design_Report.md
 │   ├── 5. UnitConverter_RED_Skeleton_Report.md
-│   └── 6. UnitConverter_Logic_RED_Complete_Report.md
+│   ├── 6. UnitConverter_Logic_RED_Complete_Report.md
+│   ├── 7. UnitConverter_GREEN_Complete_Report.md
+│   └── 8. UnitConverter_Progress_Summary_Report.md   # 누적 SSOT
 ├── Prompt/
 │   ├── 1. mom-test-transcript.md
 │   ├── 2. ProblemDefinition-transcript.md
 │   ├── 3. AI-Layer-Setup-transcript.md
 │   ├── 4. UnitConverter_RED_Design-Transcript.md
 │   ├── 5. UnitConverter_RED_Skeleton-Transcript.md
-│   └── 6. UnitConverter_Logic_RED_Complete-Transcript.md
+│   ├── 6. UnitConverter_Logic_RED_Complete-Transcript.md
+│   ├── 7. UnitConverter_GREEN_Complete-Transcript.md
+│   └── 8. UnitConverter_Progress_Export-Transcript.md
 ├── src/
 │   ├── entity/                   # 변환·비율 (순수 로직)
 │   ├── control/                  # 파싱·유스케이스
 │   └── boundary/                 # CLI·I/O
 ├── tests/
 │   ├── conftest.py               # G1·검증·확장 픽스처 (데이터만)
-│   ├── entity/                   # test_d_conv_*.py, test_d_val_*.py
+│   ├── entity/                   # test_d_conv_*.py, test_d_val_*.py, test_d_ext_*.py
 │   ├── control/
-│   └── boundary/                 # test_u_*.py
+│   └── boundary/                 # test_u_cli_*.py · fixtures/*.stdout
 └── .cursor/
     ├── commands/                 # tdd-red.md, review-ecb.md
     ├── hooks/                    # pytest 자동 실행·스냅샷 차단
@@ -173,16 +194,12 @@ source venv/bin/activate
 # 실행
 python UnitConverter.py
 
-# 테스트 — Layer 작업 중
+# 테스트 — Layer별
 pytest tests/entity -q
+pytest tests/control -q
+pytest tests/boundary -q
 
-# RED — Logic 전체 (현재 12건 의도적 FAIL)
-pytest tests/entity tests/control -v
-
-# RED — 단일 ID
-pytest tests/entity/test_d_conv_01.py::test_d_conv_01_meter_to_feet -v
-
-# 전체 (Phase 종료·REFACTOR 후)
+# 전체 (GREEN: 18 passed)
 pytest -q
 
 # 가상환경 비활성화
@@ -201,13 +218,14 @@ deactivate
 meter:2.5
 ```
 
-출력 예시:
+출력 예시 (CLI — **입력 단위 제외**, 테스트 정밀값):
 
 ```
-2.5 meter = 8.2 feet
-2.5 meter = 2.7 yard
-...
+2.5 meter = 8.2021 feet
+2.5 meter = 2.734025 yard
 ```
+
+> README 요약(8.2 feet)은 반올림 표현 · Golden Master·Logic 테스트는 **8.2021** SSOT.
 
 ### Supported Units
 
@@ -257,10 +275,9 @@ meter:2.5
 
 ## 다음 단계
 
-1. `/green-minimal` — `src/entity/constants.py` + `conversion.py` (D-CONV-01 GREEN)
-2. entity D-CONV-02~03 → D-VAL-* → D-EXT-* 순차 GREEN
-3. entity Layer `pytest tests/entity -q` 통과 후 control GREEN
-4. Logic Track 완료 후 boundary `U-*` RED
+1. **REFACTOR** — 예외 매핑·`validate_numeric` 연결·중복 제거
+2. UI 확장 — feet/yard 입력 Golden Master (선택)
+3. PRD SC1~3 체크리스트 갱신
 
 ---
 
@@ -274,9 +291,13 @@ meter:2.5
 | [Report/3. AI-Layer-Setup_Report.md](./Report/3.%20AI-Layer-Setup_Report.md) | Harness · Hook · 8계층 |
 | [Report/4. UnitConverter_RED_Design_Report.md](./Report/4.%20UnitConverter_RED_Design_Report.md) | RED 설계 · C2C · G1 격자 |
 | [Report/5. UnitConverter_RED_Skeleton_Report.md](./Report/5.%20UnitConverter_RED_Skeleton_Report.md) | RED 스켈레톤 · D-CONV-01 FAIL |
-| [Report/6. UnitConverter_Logic_RED_Complete_Report.md](./Report/6.%20UnitConverter_Logic_RED_Complete_Report.md) | Logic RED 12건 완료 · naming·Harness |
+| [Report/6. UnitConverter_Logic_RED_Complete_Report.md](./Report/6.%20UnitConverter_Logic_RED_Complete_Report.md) | Logic RED 12건 완료 |
+| [Report/7. UnitConverter_GREEN_Complete_Report.md](./Report/7.%20UnitConverter_GREEN_Complete_Report.md) | GREEN · Golden Master · convert_all 정리 |
+| [Report/8. UnitConverter_Progress_Summary_Report.md](./Report/8.%20UnitConverter_Progress_Summary_Report.md) | **누적 진행 SSOT** · REFACTOR 백로그 |
 | [Prompt/4. UnitConverter_RED_Design-Transcript.md](./Prompt/4.%20UnitConverter_RED_Design-Transcript.md) | 세션 4 Transcript |
 | [Prompt/5. UnitConverter_RED_Skeleton-Transcript.md](./Prompt/5.%20UnitConverter_RED_Skeleton-Transcript.md) | 세션 5 Transcript |
 | [Prompt/6. UnitConverter_Logic_RED_Complete-Transcript.md](./Prompt/6.%20UnitConverter_Logic_RED_Complete-Transcript.md) | 세션 6 Transcript |
+| [Prompt/7. UnitConverter_GREEN_Complete-Transcript.md](./Prompt/7.%20UnitConverter_GREEN_Complete-Transcript.md) | 세션 7 GREEN Transcript |
+| [Prompt/8. UnitConverter_Progress_Export-Transcript.md](./Prompt/8.%20UnitConverter_Progress_Export-Transcript.md) | 세션 8 Export Transcript |
 | [Mom Test Report](./Report/1.%20mom-test-report.md) | 인터뷰 증거 |
 | [Problem Definition Report](./Report/2.ProblemDefinition_Report.md) | R-G-I-O · SC1~3 |
