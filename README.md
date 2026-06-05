@@ -130,8 +130,7 @@ UnitConverter_28/
 ├── Prompt/
 │   ├── 1. mom-test-transcript.md
 │   ├── 2. ProblemDefinition-transcript.md
-│   └── 3. AI-Layer-Setup-transcript.md
-├── Prompting/
+│   ├── 3. AI-Layer-Setup-transcript.md
 │   └── 4. UnitConverter_RED_Design-Transcript.md
 ├── src/
 │   ├── entity/                   # 변환·비율 (순수 로직)
@@ -264,6 +263,6 @@ meter:2.5
 | [reference.md](./.cursor/skills/unit-conversion-tdd/reference.md) | **D-* 테스트 ID** |
 | [Report/3. AI-Layer-Setup_Report.md](./Report/3.%20AI-Layer-Setup_Report.md) | Harness · Hook · 8계층 |
 | [Report/4. UnitConverter_RED_Design_Report.md](./Report/4.%20UnitConverter_RED_Design_Report.md) | RED 설계 · C2C · G1 격자 |
-| [Prompting/4. UnitConverter_RED_Design-Transcript.md](./Prompting/4.%20UnitConverter_RED_Design-Transcript.md) | 세션 4 Transcript |
+| [Prompt/4. UnitConverter_RED_Design-Transcript.md](./Prompt/4.%20UnitConverter_RED_Design-Transcript.md) | 세션 4 Transcript |
 | [Mom Test Report](./Report/1.%20mom-test-report.md) | 인터뷰 증거 |
 | [Problem Definition Report](./Report/2.ProblemDefinition_Report.md) | R-G-I-O · SC1~3 |
